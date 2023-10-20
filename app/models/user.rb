@@ -33,21 +33,21 @@ class User < ApplicationRecord
 
   has_many :likes, foreign_key: :fan_id
 
-  has_many :sent_follow_requests, foreign_key: :sender_id, class_name: "FollowRequest"
-  has_many :accepted_sent_follow_requests, ->  { accepted }, foreign_key: :sender_id, class_name: "FollowRequest"
-  has_many :received_follow_requests, foreign_key: :recipient_id, class_name: "FollowRequest"
-  has_many :accepted_received_follow_requests, -> { accepted }, foreign_key: :recipient_id, class_name: "FollowRequest"
+  has_many :sent_follow_requests, foreign_key: :sender_id, class_name: "FollowRequest", dependent: :destroy
+  has_many :accepted_sent_follow_requests, ->  { accepted }, foreign_key: :sender_id, class_name: "FollowRequest", dependent: :destroy
+  has_many :received_follow_requests, foreign_key: :recipient_id, class_name: "FollowRequest", dependent: :destroy
+  has_many :accepted_received_follow_requests, -> { accepted }, foreign_key: :recipient_id, class_name: "FollowRequest", dependent: :destroy
 
   #indirect associations
   #shows all the photos the user has liked
   has_many :liked_photos, through: :likes, source: :photos
   #recipients of sent follow requests from the user
-  has_many :leaders, through: :accepted_sent_follow_requests, source: :recipient
+  has_many :leaders, through: :accepted_sent_follow_requests, source: :recipient, dependent: :destroy
   #accepted follow requests received by the user aka followers
-  has_many :followers, through: :accepted_received_follow_requests, source: :sender
+  has_many :followers, through: :accepted_received_follow_requests, source: :sender, dependent: :destroy
 
-  has_many :feed, through: :leaders, source: :own_photos
-  has_many :discover, through: :leaders, source: :liked_photos
+  has_many :feed, through: :leaders, source: :own_photos, dependent: :destroy
+  has_many :discover, through: :leaders, source: :liked_photos, dependent: :destroy
 
   validates :username, presence: true, uniqueness: true
 end

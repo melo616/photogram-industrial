@@ -10,17 +10,17 @@ task({ :sample_data => :environment }) do
     User.destroy_all
   end
 
-    12.times do
-      name = Faker::Name.first_name
-      u = User.create(
-        email: "#{name}@example.com",
-        password: "password",
-        username: name,
-        private: [true, false].sample,
-      )
+  12.times do
+    name = Faker::Name.first_name
+    u = User.create(
+      email: "#{name}@example.com",
+      password: "password",
+      username: name,
+      private: [true, false].sample,
+    )
 
-      p u.errors.full_messages
-    end
+    p u.errors.full_messages
+  end
 
   users = User.all
 

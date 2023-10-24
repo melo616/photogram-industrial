@@ -40,7 +40,7 @@ class User < ApplicationRecord
 
   #indirect associations
   #shows all the photos the user has liked
-  has_many :liked_photos, through: :likes, source: :photos
+  has_many :liked_photos, through: :likes, source: :photo
   #recipients of sent follow requests from the user
   has_many :leaders, through: :accepted_sent_follow_requests, source: :recipient
   #accepted follow requests received by the user aka followers
